@@ -1,22 +1,5 @@
 version: '3.8'
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
-      APP_PORT: ${APP_PORT}
-    ports:
-      - '${APP_PORT}:${APP_PORT}'
-    networks:
-      - app-network
-    depends_on:
-      postgres:
-        condition: service_healthy 
-
-
   postgres:
     image: postgres:latest
     container_name: postgres
@@ -24,13 +7,13 @@ services:
     env_file:
       - .env
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - ./data:/var/lib/postgresql/data
     ports:
-      - '5432:5432'
+      - "5432:5432" 
     networks:
       - app-network
     healthcheck:
