@@ -1,7 +1,7 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { IUserRepository } from 'src/shared/database/repositories/user-repository.interface';
 import { IJwtProvider } from 'src/shared/providers/interfaces/jwt.provider.interface';
-import { LoginDTO } from '../dtos/login-dto';
+import { LoginDto } from '../dtos/login-dto';
 import { AuthResponseDTO } from '../dtos/auth-response.dto';
 import { ValidateUserService } from './validate-user.service';
 
@@ -15,7 +15,7 @@ export class LoginService {
     private readonly validateUserService: ValidateUserService,
   ) {}
 
-  async execute({ email, password }: LoginDTO): Promise<AuthResponseDTO> {
+  async execute({ email, password }: LoginDto): Promise<AuthResponseDTO> {
     const validUser = await this.validateUserService.execute(email, password);
 
     if (!validUser) {
