@@ -36,10 +36,12 @@ import { UpdateShortUrlService } from '../services/update-short-url.service';
 import { UpdateShortUrlDto } from 'src/shared/database/dtos/update-short-url.dto';
 import { PaginationDto } from 'src/shared/database/dtos/pagination.dto';
 import { ParsePaginationPipe } from 'src/shared/pipes/parse-pagination';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @ApiBearerAuth()
 @ApiTags('Short Url')
 @Controller({ path: 'shortUrl', version: '1' })
+@UseGuards(ThrottlerGuard)
 export class ShortUrlController {
   constructor(
     private readonly createShortUrlService: CreateShortUrlService,
