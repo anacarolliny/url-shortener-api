@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { HashProvider } from './hash.provider';
 import { JwtProvider } from './jwt.provider';
+import { OptionalAuthMiddleware } from '../middlewares/optional-auth.middleware';
 
 @Global()
 @Module({
@@ -20,7 +21,13 @@ import { JwtProvider } from './jwt.provider';
       provide: 'JwtProvider',
       useClass: JwtProvider,
     },
+    {
+      provide: 'OptionalAuthMiddleware',
+      useClass: OptionalAuthMiddleware,
+    },
+    JwtModule,
   ],
-  exports: ['HashProvider', 'JwtProvider'],
+
+  exports: ['HashProvider', 'JwtProvider', 'OptionalAuthMiddleware', JwtModule],
 })
 export class ProvidersModule {}
