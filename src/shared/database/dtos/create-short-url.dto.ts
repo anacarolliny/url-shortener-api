@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsString,
   IsNotEmpty,
@@ -7,11 +8,13 @@ import {
 } from 'class-validator';
 
 export class CreateShortUrlDto {
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   @IsUrl()
   originalUrl: string;
 
+  @ApiProperty()
   @IsString()
   @IsOptional()
   @IsUUID()

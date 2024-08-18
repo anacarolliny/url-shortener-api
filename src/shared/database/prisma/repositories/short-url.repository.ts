@@ -11,7 +11,7 @@ export class ShortUrlRepository implements IShortUrlRepository {
   async createShortUrl(data: CreateShortUrlDto): Promise<ShortUrlModel> {
     const uniqueShortUrl = await this.generateUniqueShortUrl();
 
-    return this.prisma.shortUrls.create({
+    return await this.prisma.shortUrls.create({
       data: {
         originalUrl: data.originalUrl,
         shortUrl: uniqueShortUrl,
@@ -30,7 +30,7 @@ export class ShortUrlRepository implements IShortUrlRepository {
       unique = await this.isUniqueShortUrl(shortUrl);
     }
 
-    return shortUrl;
+    return `${process.env.APP_HOST}/${shortUrl}`;
   }
 
   private createRandomString(length = 6): string {
@@ -62,7 +62,14 @@ export class ShortUrlRepository implements IShortUrlRepository {
 
   async findShortUrlsByUserId(userId: string): Promise<ShortUrlModel[]> {
     return this.prisma.shortUrls.findMany({
-      where: { userId },
+      where: {
+        userId,
+        deletedAt: {
+          equals: null,
+        },
+      },
+
+      orderBy: { createdAt: 'desc' },
     });
   }
 
@@ -79,6 +86,54 @@ export class ShortUrlRepository implements IShortUrlRepository {
   async deleteShortUrl(id: string): Promise<void> {
     await this.prisma.shortUrls.delete({
       where: { id },
+    });
+  }
+
+  async findShortUrlById(id: string) {
+    return this.prisma.shortUrls.findUnique({
+      where: {
+        id,
+        deletedAt: {
+          equals: null,
+        },
+      },
+    });
+  }
+
+  async softDeleteShortUrl(id: string) {
+    await this.prisma.shortUrls.update({
+      where: {
+        id,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+  }
+
+  async incrementAccessCount(id: string) {
+    await this.prisma.shortUrls.update({
+      where: {
+        id,
+      },
+      data: {
+        clickCount: {
+          increment: 1,
+        },
+      },
+    });
+  }
+
+  async findOriginalUrlAndIncrementClick(
+    shortUrl: string,
+  ): Promise<ShortUrlModel | null> {
+    return this.prisma.shortUrls.update({
+      where: { shortUrl, deletedAt: null },
+      data: {
+        clickCount: {
+          increment: 1,
+        },
+      },
     });
   }
 }

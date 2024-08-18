@@ -8,4 +8,10 @@ export interface IShortUrlRepository {
   findShortUrlsByUserId(userId: string): Promise<ShortUrlModel[]>;
   updateShortUrl(id: string, data: UpdateShortUrlDto): Promise<ShortUrlModel>;
   deleteShortUrl(id: string): Promise<void>;
+  findShortUrlById(id: string): Promise<ShortUrlModel | null>;
+  softDeleteShortUrl(id: string): Promise<void>;
+  incrementAccessCount(id: string): Promise<void>;
+  findOriginalUrlAndIncrementClick(
+    shortUrl: string,
+  ): Promise<ShortUrlModel | null>;
 }
