@@ -21,7 +21,11 @@ export class CreateUserService {
 
     const user = await this.createUser(name, email, passwordHash);
 
-    return user;
+    return {
+      name: user.name,
+      email: user.email,
+      createdAt: user.createdAt,
+    };
   }
 
   private async verifyUserExistsByEmail(email: string) {

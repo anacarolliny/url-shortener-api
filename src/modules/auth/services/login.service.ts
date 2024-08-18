@@ -33,7 +33,6 @@ export class LoginService {
     const expirationDate = await this.jwtProvider.getExpirationDate(token);
     return {
       user: {
-        id: validUser.id,
         name: validUser.name,
         email: validUser.email,
       },

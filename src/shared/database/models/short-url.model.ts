@@ -1,7 +1,7 @@
 import { UserModel } from './user.model';
 
 export interface ShortUrlModel {
-  id: string;
+  id?: string;
   shortUrl: string;
   originalUrl: string;
   clickCount: number;

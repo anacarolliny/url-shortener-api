@@ -1,6 +1,6 @@
 export class AuthResponseDTO {
   user: {
-    id: string;
+    id?: string;
     name: string;
     email: string;
   };
