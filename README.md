@@ -74,7 +74,7 @@ POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
 
 # URL de Conexão do Banco de Dados
-DATABASE_URL=postgresql://postgres:secret@postgres:5432/urlshortener
+DATABASE_URL=postgresql://postgres:secret@localhost:5432/urlshortener
 
 # Configuração do JWT
 JWT_SECRET_KEY=your_secret_key
@@ -89,10 +89,6 @@ THROTTLER_LIMIT=100
 
 ```
 
-2. Configure o banco de dados:
-   ```bash
-   npx prisma migrate dev
-   ```
 
 ## Rodando a Aplicação
 
@@ -101,13 +97,18 @@ THROTTLER_LIMIT=100
    docker-compose up -d
    ```
 
-2. Inicie a aplicação:
+2. Configure o banco de dados rodando as migrações:
+   ```bash
+   npx prisma migrate dev
+   ```
+
+3. Inicie a aplicação:
    ```bash
    npm run start:dev
    ```
 
 3. Acesse a aplicação:
-   - A API estará disponível em: `http://localhost:3000`.
+   - A API estará disponível em: `http://localhost:4000`.
 
 ## Endpoints Principais
 
