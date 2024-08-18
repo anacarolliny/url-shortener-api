@@ -9,8 +9,16 @@ export class GetShortUrlByUserIdService {
     private readonly shortUrlRepository: IShortUrlRepository,
   ) {}
 
-  async execute(id: string): Promise<ShortUrlModel[]> {
-    const shortUrls = await this.shortUrlRepository.findShortUrlsByUserId(id);
+  async execute(
+    id: string,
+    page: number,
+    limit: number,
+  ): Promise<ShortUrlModel[]> {
+    const shortUrls = await this.shortUrlRepository.findShortUrlsByUserId(
+      id,
+      page,
+      limit,
+    );
 
     return shortUrls;
   }

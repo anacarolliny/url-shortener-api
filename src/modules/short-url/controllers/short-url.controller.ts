@@ -8,14 +8,17 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
   UseInterceptors,
+  UsePipes,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateShortUrlDto } from 'src/shared/database/dtos/create-short-url.dto';
@@ -31,6 +34,8 @@ import { GetShortUrlByIdService } from '../services/get-short-url-by-id.service'
 import { GetOriginalUrlByShortService } from '../services/get-original-url-by-short.service';
 import { UpdateShortUrlService } from '../services/update-short-url.service';
 import { UpdateShortUrlDto } from 'src/shared/database/dtos/update-short-url.dto';
+import { PaginationDto } from 'src/shared/database/dtos/pagination.dto';
+import { ParsePaginationPipe } from 'src/shared/pipes/parse-pagination';
 
 @ApiBearerAuth()
 @ApiTags('Short Url')
@@ -91,9 +96,29 @@ export class ShortUrlController {
   @ApiOperation({
     summary: 'Get all short urls by user',
   })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    description: 'Page number',
+    schema: { type: 'integer', default: 1 },
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    description: 'Number of items per page',
+    schema: { type: 'integer', default: 10 },
+  })
+  @UsePipes(new ParsePaginationPipe())
   @Get('user/all')
-  async getAllByUserId(@GetLoggedUser() user: UserModel) {
-    return this.getShortUrlByUserIdService.execute(user.id);
+  async getAllByUserId(
+    @GetLoggedUser() user: UserModel,
+    @Query() paginationDto: PaginationDto,
+  ) {
+    return this.getShortUrlByUserIdService.execute(
+      user.id,
+      paginationDto.page,
+      paginationDto.limit,
+    );
   }
 
   @UseGuards(JwtAuthGuard)

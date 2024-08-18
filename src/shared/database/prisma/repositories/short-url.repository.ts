@@ -60,7 +60,11 @@ export class ShortUrlRepository implements IShortUrlRepository {
     });
   }
 
-  async findShortUrlsByUserId(userId: string): Promise<ShortUrlModel[]> {
+  async findShortUrlsByUserId(
+    userId: string,
+    page: number,
+    limit: number,
+  ): Promise<ShortUrlModel[]> {
     return this.prisma.shortUrls.findMany({
       where: {
         userId,
@@ -68,7 +72,8 @@ export class ShortUrlRepository implements IShortUrlRepository {
           equals: null,
         },
       },
-
+      skip: (page - 1) * limit,
+      take: limit,
       orderBy: { createdAt: 'desc' },
     });
   }
