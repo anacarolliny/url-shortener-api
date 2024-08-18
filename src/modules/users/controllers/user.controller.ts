@@ -6,7 +6,7 @@ import { Public } from 'src/shared/decorators/is-public-endpoint.decorator';
 
 @ApiBearerAuth()
 @ApiTags('Users')
-@Controller('users')
+@Controller({ path: 'users', version: '1' })
 export class UsersController {
   constructor(private readonly createUserService: CreateUserService) {}
 
