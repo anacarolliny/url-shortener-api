@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ProvidersModule } from './shared/providers/providers.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
+import { ShortUrlModule } from './modules/short-url/short-url.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UsersModule } from './modules/users/users.module';
     ProvidersModule,
     AuthModule,
     UsersModule,
+    ShortUrlModule,
   ],
   controllers: [AppController],
   providers: [AppService],
